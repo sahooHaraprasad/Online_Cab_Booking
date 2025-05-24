@@ -1,5 +1,3 @@
-# Online Cab Booking System
-
 A web application for booking luxury and regular cars built with MERN stack (MongoDB, Express.js, React.js, Node.js).
 
 ## Features
@@ -38,6 +36,8 @@ npm install
 ```bash
 # Start backend server
 cd car-booking-backend
+node renameImages.js
+node seedCars.js
 npm start
 
 # Start frontend development server
