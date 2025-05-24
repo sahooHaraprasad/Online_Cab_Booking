@@ -1,0 +1,29 @@
+# dependencies
+node_modules/
+.env
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# VS Code
+.vscode/
+
+# Windows
+desktop.ini
+*.lnk
+
+# User-specific files
+*.log
+ntuser.*
+NTUSER.*
+
+# Root level only
+/*
+!/car-booking-frontend/
+!/car-booking-backend/
+!.gitignore
+!README.md
