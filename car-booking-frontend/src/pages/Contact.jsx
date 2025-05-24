@@ -1,8 +1,9 @@
+import { motion } from 'framer-motion';
 import { useState } from 'react';
 import axios from 'axios';
 
 function Contact() {
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     name: '',
     email: '',
     message: ''
@@ -10,7 +11,7 @@ function Contact() {
   const [status, setStatus] = useState('');
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -18,96 +19,74 @@ function Contact() {
     setStatus('sending');
 
     try {
-      await axios.post('http://localhost:5000/api/contact', form);
+      await axios.post('http://localhost:5000/api/contact', formData);
       setStatus('success');
-      setForm({ name: '', email: '', message: '' });
+      setFormData({ name: '', email: '', message: '' });
     } catch (err) {
       setStatus('error');
     }
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Contact Information */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <h1 className="text-3xl font-bold mb-6">Contact Us</h1>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Direct Contact */}
-            <div>
-              <h2 className="text-xl font-semibold mb-4">Get in Touch</h2>
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-semibold">Phone:</h3>
-                  <a href="tel:+91 6371918118" className="text-blue-600 hover:underline">
-                    +91 6371918118
-                  </a>
-                </div>
-                <div>
-                  <h3 className="font-semibold">WhatsApp:</h3>
-                  <a 
-                    href="https://wa.me/+91 6371918118"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
-                  >
-                    Message us on WhatsApp
-                  </a>
-                </div>
-                <div>
-                  <h3 className="font-semibold">Email:</h3>
-                  <a href="mailto:haraprasadsahoo5805@gmail.com" className="text-blue-600 hover:underline">
-                    haraprasadsahoo5805@gmail
-                  </a>
-                </div>
-                <div>
-                  <h3 className="font-semibold">Address:</h3>
-                  <p>123 Main Street</p>
-                  <p>City, State 12345</p>
-                </div>
-              </div>
-            </div>
+    <div className="pt-16 min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="container mx-auto px-4 py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h1 className="text-5xl font-bold text-gray-800 mb-8 text-center">
+            Get in <span className="text-blue-600">Touch</span>
+          </h1>
 
-            {/* Contact Form */}
-            <div>
-              <h2 className="text-xl font-semibold mb-4">Send us a Message</h2>
-              <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-xl shadow-lg p-8"
+            >
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">Send Us a Message</h2>
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
+                  <label className="block text-gray-700 mb-2 font-medium">Name</label>
                   <input
                     type="text"
                     name="name"
-                    placeholder="Your Name"
-                    value={form.name}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Your name"
+                    value={formData.name}
                     onChange={handleChange}
-                    className="w-full p-2 border rounded"
                     required
                   />
                 </div>
                 <div>
+                  <label className="block text-gray-700 mb-2 font-medium">Email</label>
                   <input
                     type="email"
                     name="email"
-                    placeholder="Your Email"
-                    value={form.email}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="your@email.com"
+                    value={formData.email}
                     onChange={handleChange}
-                    className="w-full p-2 border rounded"
                     required
                   />
                 </div>
                 <div>
+                  <label className="block text-gray-700 mb-2 font-medium">Message</label>
                   <textarea
                     name="message"
-                    placeholder="Your Message"
-                    value={form.message}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    rows="5"
+                    placeholder="Your message"
+                    value={formData.message}
                     onChange={handleChange}
-                    className="w-full p-2 border rounded h-32"
                     required
                   ></textarea>
                 </div>
                 <button
                   type="submit"
-                  className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium"
                   disabled={status === 'sending'}
                 >
                   {status === 'sending' ? 'Sending...' : 'Send Message'}
@@ -119,9 +98,67 @@ function Contact() {
                   <p className="text-red-600">Failed to send message. Please try again.</p>
                 )}
               </form>
-            </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+              className="space-y-8"
+            >
+              <div className="bg-white rounded-xl shadow-lg p-8">
+                <h2 className="text-2xl font-bold text-gray-800 mb-6">Contact Information</h2>
+                <div className="space-y-4">
+                  <div className="flex items-start space-x-4">
+                    <div className="bg-blue-100 p-3 rounded-lg">
+                      <i className="fas fa-map-marker-alt text-blue-600"></i>
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-gray-800">Address</h3>
+                      <p className="text-gray-600">123 Car Street, Auto City, AC 12345</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-4">
+                    <div className="bg-blue-100 p-3 rounded-lg">
+                      <i className="fas fa-phone text-blue-600"></i>
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-gray-800">Phone</h3>
+                      <p className="text-gray-600">+91 6371918118</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-4">
+                    <div className="bg-blue-100 p-3 rounded-lg">
+                      <i className="fas fa-envelope text-blue-600"></i>
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-gray-800">Email</h3>
+                      <p className="text-gray-600">info@luxurycars.com</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-lg p-8">
+                <h2 className="text-2xl font-bold text-gray-800 mb-6">Business Hours</h2>
+                <div className="space-y-2">
+                  <p className="flex justify-between">
+                    <span className="text-gray-600">Monday - Friday:</span>
+                    <span className="font-medium">9:00 AM - 6:00 PM</span>
+                  </p>
+                  <p className="flex justify-between">
+                    <span className="text-gray-600">Saturday:</span>
+                    <span className="font-medium">10:00 AM - 4:00 PM</span>
+                  </p>
+                  <p className="flex justify-between">
+                    <span className="text-gray-600">Sunday:</span>
+                    <span className="font-medium">Closed</span>
+                  </p>
+                </div>
+              </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

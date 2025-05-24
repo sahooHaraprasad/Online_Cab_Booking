@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import PrivateRoute from './components/privateRoute';
 import Navbar from './components/Navbar';
@@ -9,7 +10,6 @@ import CarDetail from './pages/CarDetail';
 import Profile from './pages/Profile';
 import Contact from './pages/Contact';
 import About from './pages/About';
-import { useState, useEffect } from 'react';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -57,11 +57,11 @@ function App() {
     <Router>
       <div className="min-h-screen bg-gray-50">
         <Navbar isAuthenticated={isAuthenticated} />
-        <main className="container mx-auto px-4 py-8">
+        <div className="pt-16">
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/register" element={<Register />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
@@ -95,7 +95,7 @@ function App() {
             {/* 404 Route */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-        </main>
+        </div>
       </div>
     </Router>
   );

@@ -5,6 +5,7 @@ function Cars() {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeFilter, setActiveFilter] = useState('all');
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -26,52 +27,95 @@ function Cars() {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-center">Available Cars</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {cars.map((car) => (
-          <div key={car._id} className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="relative h-48 bg-gray-200">
-              <img
-                src={`http://localhost:5000${car.image}`}
-                alt={car.name}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  console.log('Image failed to load:', car.image);
-                  e.target.onerror = null;
-                  e.target.src = "http://localhost:5000/images/default-car.jpg";
-                }}
-              />
-            </div>
-            <div className="p-4">
-              <h2 className="text-xl font-bold mb-2">{car.name}</h2>
-              <div className="space-y-2 text-gray-600">
-                <p>Model: {car.model}</p>
-                <p>Capacity: {car.capacity} persons</p>
-                <p>Fuel Type: {car.fuelType}</p>
-                <p className="text-lg font-bold text-blue-600 mt-4">
-                  ₹{car.pricePerDay.toLocaleString()}/day
-                </p>
+    <div className="min-h-screen bg-gray-100">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+        <div className="container mx-auto px-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Luxury & Comfort Cars</h1>
+          <p className="text-xl opacity-90">Choose from our premium selection of vehicles</p>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex gap-4 mb-8 overflow-x-auto pb-2">
+          {['all', 'luxury', 'suv', 'sedan'].map(filter => (
+            <button
+              key={filter}
+              onClick={() => setActiveFilter(filter)}
+              className={`px-6 py-2 rounded-full capitalize transition-all ${
+                activeFilter === filter
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
+
+        {/* Cars Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {cars.map((car) => (
+            <div
+              key={car._id}
+              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+            >
+              <div className="relative h-56">
+                <img
+                  src={`http://localhost:5000${car.image}`}
+                  alt={car.name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "http://localhost:5000/images/default-car.jpg";
+                  }}
+                />
+                <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full">
+                  <span className="text-blue-600 font-semibold">₹{car.pricePerDay.toLocaleString()}/day</span>
+                </div>
               </div>
-              <div className="flex space-x-2 mt-4">
-                <a
-                  href={`https://wa.me/+916371918118?text=I'm interested in booking the ${car.name}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 bg-green-500 text-white text-center py-2 rounded hover:bg-green-600 transition-colors"
-                >
-                  Book on WhatsApp
-                </a>
-                <a
-                  href="tel:+916371918118"
-                  className="flex-1 bg-blue-500 text-white text-center py-2 rounded hover:bg-blue-600 transition-colors"
-                >
-                  Call to Book
-                </a>
+
+              <div className="p-6">
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">{car.name}</h2>
+                
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="flex items-center">
+                    <i className="fas fa-users text-gray-500 mr-2"></i>
+                    <span>{car.capacity} Seats</span>
+                  </div>
+                  <div className="flex items-center">
+                    <i className="fas fa-gas-pump text-gray-500 mr-2"></i>
+                    <span>{car.fuelType}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <i className="fas fa-calendar text-gray-500 mr-2"></i>
+                    <span>{car.model}</span>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <a
+                    href={`https://wa.me/+916371918118?text=I'm interested in booking the ${car.name}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 bg-green-500 text-white text-center py-3 rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <i className="fab fa-whatsapp text-xl"></i>
+                    <span>WhatsApp</span>
+                  </a>
+                  <a
+                    href="tel:+916371918118"
+                    className="flex-1 bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <i className="fas fa-phone text-xl"></i>
+                    <span>Call Now</span>
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
